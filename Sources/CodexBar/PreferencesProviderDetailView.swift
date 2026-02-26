@@ -28,7 +28,7 @@ struct ProviderDetailView: View {
             return nil
         }
         guard provider == .openrouter else {
-            return (label: "Plan", value: rawPlan)
+            return (label: "套餐", value: rawPlan)
         }
 
         let prefix = "Balance:"
@@ -36,10 +36,10 @@ struct ProviderDetailView: View {
             let valueStart = rawPlan.index(rawPlan.startIndex, offsetBy: prefix.count)
             let trimmedValue = rawPlan[valueStart...].trimmingCharacters(in: .whitespacesAndNewlines)
             if !trimmedValue.isEmpty {
-                return (label: "Balance", value: trimmedValue)
+                return (label: "余额", value: trimmedValue)
             }
         }
-        return (label: "Balance", value: rawPlan)
+        return (label: "余额", value: rawPlan)
     }
 
     var body: some View {
@@ -70,7 +70,7 @@ struct ProviderDetailView: View {
                 }
 
                 if self.hasSettings {
-                    ProviderSettingsSection(title: "Settings") {
+                    ProviderSettingsSection(title: "设置") {
                         ForEach(self.settingsPickers) { picker in
                             ProviderSettingsPickerRowView(picker: picker)
                         }
@@ -86,7 +86,7 @@ struct ProviderDetailView: View {
                 }
 
                 if !self.settingsToggles.isEmpty {
-                    ProviderSettingsSection(title: "Options") {
+                    ProviderSettingsSection(title: "选项") {
                         ForEach(self.settingsToggles) { toggle in
                             ProviderSettingsToggleRowView(toggle: toggle)
                         }
@@ -107,9 +107,9 @@ struct ProviderDetailView: View {
     }
 
     private var detailLabelWidth: CGFloat {
-        var infoLabels = ["State", "Source", "Version", "Updated"]
+        var infoLabels = ["状态", "来源", "版本", "更新于"]
         if self.store.status(for: self.provider) != nil {
-            infoLabels.append("Status")
+            infoLabels.append("状态")
         }
         if !self.model.email.isEmpty {
             infoLabels.append("Account")
@@ -174,7 +174,7 @@ private struct ProviderDetailHeaderView: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-                .help("Refresh")
+                .help("刷新")
 
                 Toggle("", isOn: self.$isEnabled)
                     .labelsHidden()
@@ -234,10 +234,10 @@ private struct ProviderDetailInfoGrid: View {
     var body: some View {
         let status = self.store.status(for: self.provider)
         let source = self.store.sourceLabel(for: self.provider)
-        let version = self.store.version(for: self.provider) ?? "not detected"
+        let version = self.store.version(for: self.provider) ?? "未检测到"
         let updated = self.updatedText
         let email = self.model.email
-        let enabledText = self.isEnabled ? "Enabled" : "Disabled"
+        let enabledText = self.isEnabled ? "已启用" : "已禁用"
 
         Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 6) {
             ProviderDetailInfoRow(label: "State", value: enabledText, labelWidth: self.labelWidth)
@@ -269,9 +269,9 @@ private struct ProviderDetailInfoGrid: View {
             return UsageFormatter.updatedString(from: updated)
         }
         if self.store.refreshingProviders.contains(self.provider) {
-            return "Refreshing"
+            return "刷新中"
         }
-        return "Not fetched yet"
+        return "尚未获取"
     }
 }
 
@@ -304,7 +304,7 @@ struct ProviderMetricsInlineView: View {
         let hasProviderCost = self.model.providerCost != nil
         let hasTokenUsage = self.model.tokenUsage != nil
         ProviderSettingsSection(
-            title: "Usage",
+            title: "用量",
             spacing: 8,
             verticalPadding: 6,
             horizontalPadding: 0)
@@ -359,9 +359,9 @@ struct ProviderMetricsInlineView: View {
 
     private var placeholderText: String {
         if !self.isEnabled {
-            return "Disabled — no recent data"
+            return "已禁用 — 无近期数据"
         }
-        return self.model.placeholder ?? "No usage yet"
+        return self.model.placeholder ?? "暂无用量"
     }
 }
 
@@ -501,7 +501,7 @@ private struct ProviderMetricInlineCostRow: View {
                     .frame(minWidth: ProviderSettingsMetrics.metricBarWidth, maxWidth: .infinity)
 
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(String(format: "%.0f%% used", self.section.percentUsed))
+                    Text(String(format: "%.0f%% 已用", self.section.percentUsed))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .monospacedDigit()

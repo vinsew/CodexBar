@@ -29,7 +29,7 @@ struct CreditsHistoryChartMenuView: View {
         let model = Self.makeModel(from: self.breakdown)
         VStack(alignment: .leading, spacing: 10) {
             if model.points.isEmpty {
-                Text("No credits history data.")
+                Text("暂无 Credits 历史数据")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             } else {
@@ -98,7 +98,7 @@ struct CreditsHistoryChartMenuView: View {
                 }
 
                 if let total = model.totalCreditsUsed {
-                    Text("Total (30d): \(total.formatted(.number.precision(.fractionLength(0...2)))) credits")
+                    Text("总计（30天）：\(total.formatted(.number.precision(.fractionLength(0...2)))) credits")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -299,7 +299,7 @@ struct CreditsHistoryChartMenuView: View {
               let day = model.breakdownByDayKey[key],
               let date = Self.dateFromDayKey(key)
         else {
-            return ("Hover a bar for details", nil)
+            return ("悬停查看详情", nil)
         }
 
         let dayLabel = date.formatted(.dateTime.month(.abbreviated).day())

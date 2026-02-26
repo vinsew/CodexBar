@@ -34,28 +34,28 @@ struct PreferencesView: View {
     var body: some View {
         TabView(selection: self.$selection.tab) {
             GeneralPane(settings: self.settings, store: self.store)
-                .tabItem { Label("General", systemImage: "gearshape") }
+                .tabItem { Label("通用", systemImage: "gearshape") }
                 .tag(PreferencesTab.general)
 
             ProvidersPane(settings: self.settings, store: self.store)
-                .tabItem { Label("Providers", systemImage: "square.grid.2x2") }
+                .tabItem { Label("服务商", systemImage: "square.grid.2x2") }
                 .tag(PreferencesTab.providers)
 
             DisplayPane(settings: self.settings, store: self.store)
-                .tabItem { Label("Display", systemImage: "eye") }
+                .tabItem { Label("显示", systemImage: "eye") }
                 .tag(PreferencesTab.display)
 
             AdvancedPane(settings: self.settings)
-                .tabItem { Label("Advanced", systemImage: "slider.horizontal.3") }
+                .tabItem { Label("高级", systemImage: "slider.horizontal.3") }
                 .tag(PreferencesTab.advanced)
 
             AboutPane(updater: self.updater)
-                .tabItem { Label("About", systemImage: "info.circle") }
+                .tabItem { Label("关于", systemImage: "info.circle") }
                 .tag(PreferencesTab.about)
 
             if self.settings.debugMenuEnabled {
                 DebugPane(settings: self.settings, store: self.store)
-                    .tabItem { Label("Debug", systemImage: "ladybug") }
+                    .tabItem { Label("调试", systemImage: "ladybug") }
                     .tag(PreferencesTab.debug)
             }
         }

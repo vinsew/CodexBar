@@ -50,7 +50,7 @@ struct ProvidersPane: View {
                         }
                     })
             } else {
-                Text("Select a provider")
+                Text("选择服务商")
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
@@ -78,7 +78,7 @@ struct ProvidersPane: View {
                         active.onConfirm()
                         self.activeConfirmation = nil
                     }
-                    Button("Cancel", role: .cancel) { self.activeConfirmation = nil }
+                    Button("取消", role: .cancel) { self.activeConfirmation = nil }
                 }
             },
             message: {
@@ -115,9 +115,9 @@ struct ProvidersPane: View {
             let relative = snapshot.updatedAt.relativeDescription()
             usageText = relative
         } else if self.store.isStale(provider: provider) {
-            usageText = "last fetch failed"
+            usageText = "上次获取失败"
         } else {
-            usageText = "usage not fetched yet"
+            usageText = "尚未获取用量"
         }
 
         let presentationContext = ProviderPresentationContext(

@@ -11,20 +11,20 @@ struct GeneralPane: View {
         ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .leading, spacing: 16) {
                 SettingsSection(contentSpacing: 12) {
-                    Text("System")
+                    Text("系统")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .textCase(.uppercase)
                     PreferenceToggleRow(
-                        title: "Start at Login",
-                        subtitle: "Automatically opens CodexBar when you start your Mac.",
+                        title: "开机启动",
+                        subtitle: "Mac 启动时自动打开 CodexBar",
                         binding: self.$settings.launchAtLogin)
                 }
 
                 Divider()
 
                 SettingsSection(contentSpacing: 12) {
-                    Text("Usage")
+                    Text("用量")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .textCase(.uppercase)
@@ -32,18 +32,18 @@ struct GeneralPane: View {
                     VStack(alignment: .leading, spacing: 10) {
                         VStack(alignment: .leading, spacing: 4) {
                             Toggle(isOn: self.$settings.costUsageEnabled) {
-                                Text("Show cost summary")
+                                Text("显示费用摘要")
                                     .font(.body)
                             }
                             .toggleStyle(.checkbox)
 
-                            Text("Reads local usage logs. Shows today + last 30 days cost in the menu.")
+                            Text("读取本地用量日志，在菜单中显示今日和近30天费用")
                                 .font(.footnote)
                                 .foregroundStyle(.tertiary)
                                 .fixedSize(horizontal: false, vertical: true)
 
                             if self.settings.costUsageEnabled {
-                                Text("Auto-refresh: hourly · Timeout: 10m")
+                                Text("自动刷新：每小时 · 超时：10分钟")
                                     .font(.footnote)
                                     .foregroundStyle(.tertiary)
 
@@ -57,21 +57,21 @@ struct GeneralPane: View {
                 Divider()
 
                 SettingsSection(contentSpacing: 12) {
-                    Text("Automation")
+                    Text("自动化")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .textCase(.uppercase)
                     VStack(alignment: .leading, spacing: 6) {
                         HStack(alignment: .top, spacing: 12) {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Refresh cadence")
+                                Text("刷新频率")
                                     .font(.body)
-                                Text("How often CodexBar polls providers in the background.")
+                                Text("CodexBar 后台轮询服务商的频率")
                                     .font(.footnote)
                                     .foregroundStyle(.tertiary)
                             }
                             Spacer()
-                            Picker("Refresh cadence", selection: self.$settings.refreshFrequency) {
+                            Picker("刷新频率", selection: self.$settings.refreshFrequency) {
                                 ForEach(RefreshFrequency.allCases) { option in
                                     Text(option.label).tag(option)
                                 }
@@ -81,20 +81,19 @@ struct GeneralPane: View {
                             .frame(maxWidth: 200)
                         }
                         if self.settings.refreshFrequency == .manual {
-                            Text("Auto-refresh is off; use the menu's Refresh command.")
+                            Text("自动刷新已关闭；请使用菜单中的刷新命令")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     PreferenceToggleRow(
-                        title: "Check provider status",
-                        subtitle: "Polls OpenAI/Claude status pages and Google Workspace for " +
-                            "Gemini/Antigravity, surfacing incidents in the icon and menu.",
+                        title: "检查服务商状态",
+                        subtitle: "轮询 OpenAI/Claude 状态页和 Google Workspace 以获取 " +
+                            "Gemini/Antigravity 的状态，在图标和菜单中显示故障信息",
                         binding: self.$settings.statusChecksEnabled)
                     PreferenceToggleRow(
-                        title: "Session quota notifications",
-                        subtitle: "Notifies when the 5-hour session quota hits 0% and when it becomes " +
-                            "available again.",
+                        title: "会话额度通知",
+                        subtitle: "当 5 小时会话额度用完或恢复时发送通知",
                         binding: self.$settings.sessionQuotaNotificationsEnabled)
                 }
 
@@ -103,7 +102,7 @@ struct GeneralPane: View {
                 SettingsSection(contentSpacing: 12) {
                     HStack {
                         Spacer()
-                        Button("Quit CodexBar") { NSApp.terminate(nil) }
+                        Button("退出 CodexBar") { NSApp.terminate(nil) }
                             .buttonStyle(.borderedProminent)
                             .controlSize(.large)
                     }
@@ -119,7 +118,7 @@ struct GeneralPane: View {
         let name = ProviderDescriptorRegistry.descriptor(for: provider).metadata.displayName
 
         guard provider == .claude || provider == .codex else {
-            return Text("\(name): unsupported")
+            return Text("\(name)：不支持")
                 .font(.footnote)
                 .foregroundStyle(.tertiary)
         }
@@ -133,14 +132,14 @@ struct GeneralPane: View {
                 formatter.unitsStyle = .abbreviated
                 return formatter.string(from: seconds).map { " (\($0))" } ?? ""
             }()
-            return Text("\(name): fetching…\(elapsed)")
+            return Text("\(name)：获取中…\(elapsed)")
                 .font(.footnote)
                 .foregroundStyle(.tertiary)
         }
         if let snapshot = self.store.tokenSnapshot(for: provider) {
             let updated = UsageFormatter.updatedString(from: snapshot.updatedAt)
             let cost = snapshot.last30DaysCostUSD.map { UsageFormatter.usdString($0) } ?? "—"
-            return Text("\(name): \(updated) · 30d \(cost)")
+            return Text("\(name)：\(updated) · 30天 \(cost)")
                 .font(.footnote)
                 .foregroundStyle(.tertiary)
         }
@@ -154,11 +153,11 @@ struct GeneralPane: View {
             let rel = RelativeDateTimeFormatter()
             rel.unitsStyle = .abbreviated
             let when = rel.localizedString(for: lastAttempt, relativeTo: Date())
-            return Text("\(name): last attempt \(when)")
+            return Text("\(name)：上次尝试 \(when)")
                 .font(.footnote)
                 .foregroundStyle(.tertiary)
         }
-        return Text("\(name): no data yet")
+        return Text("\(name)：暂无数据")
             .font(.footnote)
             .foregroundStyle(.tertiary)
     }

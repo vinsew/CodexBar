@@ -87,7 +87,7 @@ struct MenuDescriptor {
                     sections.append(accountSection)
                 }
             } else {
-                sections.append(Section(entries: [.text("No usage configured.", .secondary)]))
+                sections.append(Section(entries: [.text("未配置用量监控", .secondary)]))
             }
         }
 
@@ -176,7 +176,7 @@ struct MenuDescriptor {
                 }
             }
         } else {
-            entries.append(.text("No usage yet", .secondary))
+            entries.append(.text("暂无用量数据", .secondary))
         }
 
         let usageContext = ProviderMenuUsageContext(
@@ -224,19 +224,19 @@ struct MenuDescriptor {
         let redactedEmail = PersonalInfoRedactor.redactEmail(emailText, isEnabled: hidePersonalInfo)
 
         if let emailText, !emailText.isEmpty {
-            entries.append(.text("Account: \(redactedEmail)", .secondary))
+            entries.append(.text("账户：\(redactedEmail)", .secondary))
         }
         if let planText, !planText.isEmpty {
-            entries.append(.text("Plan: \(AccountFormatter.plan(planText))", .secondary))
+            entries.append(.text("套餐：\(AccountFormatter.plan(planText))", .secondary))
         }
 
         if metadata.usesAccountFallback {
             if emailText?.isEmpty ?? true, let fallbackEmail = fallback.email, !fallbackEmail.isEmpty {
                 let redacted = PersonalInfoRedactor.redactEmail(fallbackEmail, isEnabled: hidePersonalInfo)
-                entries.append(.text("Account: \(redacted)", .secondary))
+                entries.append(.text("账户：\(redacted)", .secondary))
             }
             if planText?.isEmpty ?? true, let fallbackPlan = fallback.plan, !fallbackPlan.isEmpty {
-                entries.append(.text("Plan: \(AccountFormatter.plan(fallbackPlan))", .secondary))
+                entries.append(.text("套餐：\(AccountFormatter.plan(fallbackPlan))", .secondary))
             }
         }
 
@@ -284,7 +284,7 @@ struct MenuDescriptor {
             } else {
                 let loginAction = self.switchAccountTarget(for: provider, store: store)
                 let hasAccount = self.hasAccount(for: provider, store: store, account: account)
-                let accountLabel = hasAccount ? "Switch Account..." : "Add Account..."
+                let accountLabel = hasAccount ? "切换账户…" : "添加账户…"
                 entries.append(.action(accountLabel, loginAction))
             }
         }
@@ -300,10 +300,10 @@ struct MenuDescriptor {
         }
 
         if metadata?.dashboardURL != nil {
-            entries.append(.action("Usage Dashboard", .dashboard))
+            entries.append(.action("用量控制台", .dashboard))
         }
         if metadata?.statusPageURL != nil || metadata?.statusLinkURL != nil {
-            entries.append(.action("Status Page", .statusPage))
+            entries.append(.action("状态页面", .statusPage))
         }
 
         if let statusLine = self.statusLine(for: provider, store: store) {
@@ -316,12 +316,12 @@ struct MenuDescriptor {
     private static func metaSection(updateReady: Bool) -> Section {
         var entries: [Entry] = []
         if updateReady {
-            entries.append(.action("Update ready, restart now?", .installUpdate))
+            entries.append(.action("更新就绪，立即重启？", .installUpdate))
         }
         entries.append(contentsOf: [
-            .action("Settings...", .settings),
-            .action("About CodexBar", .about),
-            .action("Quit", .quit),
+            .action("设置…", .settings),
+            .action("关于 CodexBar", .about),
+            .action("退出", .quit),
         ])
         return Section(entries: entries)
     }
